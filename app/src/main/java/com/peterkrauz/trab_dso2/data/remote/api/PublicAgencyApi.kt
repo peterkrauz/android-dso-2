@@ -7,6 +7,6 @@ import retrofit2.http.Query
 interface PublicAgencyApi {
 
     @GET("api-de-dados/orgaos-siafi")
-    suspend fun findAll(@Query("pagina") page: Int): List<PublicAgency>
+    suspend fun getAll(@Query("pagina") page: Int): List<PublicAgency>
 
 }

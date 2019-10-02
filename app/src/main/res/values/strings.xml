@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">trab-dso2</string>
+    <string name="search">Procurar</string>
+    <string name="type_the_agency_description">Digite a descrição do Órgão</string>
 </resources>
