@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 
-class PublicAgenciesAdapter : RecyclerView.Adapter<PublicAgenciesViewHolder>() {
+class PublicAgenciesAdapter(
+    private val onAgencyClick: ((PublicAgency) -> Unit)
+) : RecyclerView.Adapter<PublicAgenciesViewHolder>() {
 
     var publicAgencies = emptyList<PublicAgency>()
         set (value) {
@@ -21,7 +23,7 @@ class PublicAgenciesAdapter : RecyclerView.Adapter<PublicAgenciesViewHolder>() {
 
     override fun onBindViewHolder(holder: PublicAgenciesViewHolder, position: Int) {
         val publicAgency = publicAgencies[position]
-        holder.bind(publicAgency)
+        holder.bind(publicAgency, onAgencyClick)
     }
 
     override fun getItemCount(): Int = publicAgencies.size

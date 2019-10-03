@@ -4,4 +4,5 @@
     <string name="description">Descrição</string>
     <string name="type_the_agency_description">Digite a descrição para a busca</string>
     <string name="this_field_is_demanded">Este campo é necessário para a busca</string>
+    <string name="federal_gov_agencies">Órgãos do Governo Federal</string>
 </resources>
