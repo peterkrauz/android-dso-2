@@ -12,4 +12,8 @@ class PublicAgencyRepository (
         return api.getAll(page)
     }
 
+    suspend fun searchByDescription(description: String, page: Int = 1): List<PublicAgency> {
+        return api.searchByDescription(description, page)
+    }
+
 }

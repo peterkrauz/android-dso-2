@@ -8,7 +8,9 @@ import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 import com.peterkrauz.trab_dso2.data.repositories.PublicAgencyRepository
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PublicAgenciesViewModel(
     private val agencyRepository: PublicAgencyRepository = Injector.publicAgencyRepository
@@ -18,6 +20,9 @@ class PublicAgenciesViewModel(
 
     val publicAgenciesLiveData = MutableLiveData<List<PublicAgency>>()
     val searchAgenciesLiveEvent = SingleLiveEvent<Unit>()
+
+    val publicAgencyTextErrorLiveData = MutableLiveData<Boolean>()
+
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveEvent = SingleLiveEvent<Throwable>()
 
@@ -36,8 +41,22 @@ class PublicAgenciesViewModel(
         errorLiveEvent.value = error
     }
 
-    fun searchAgencies() {
+    fun onSearchAgencies() {
         searchAgenciesLiveEvent.call()
+    }
+
+    fun searchAgencies(description: String) {
+        publicAgencyTextErrorLiveData.value = false
+
+        viewModelScope.launch(errorHandler) {
+            loadingLiveData.value = true
+            publicAgenciesLiveData.value = agencyRepository.searchByDescription(description)
+            loadingLiveData.value = false
+        }
+    }
+
+    fun onSearchFieldError() {
+        publicAgencyTextErrorLiveData.value = true
     }
 
 }

@@ -44,7 +44,7 @@ class PublicAgenciesActivity : AppCompatActivity() {
             setHasFixedSize(true)
         }
         fabSearchAgencies.setOnClickListener {
-            viewModel.searchAgencies()
+            viewModel.onSearchAgencies()
         }
     }
 

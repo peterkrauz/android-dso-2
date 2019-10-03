@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">trab-dso2</string>
     <string name="search">Procurar</string>
-    <string name="type_the_agency_description">Digite a descrição do Órgão</string>
+    <string name="description">Descrição</string>
+    <string name="type_the_agency_description">Digite a descrição para a busca</string>
+    <string name="this_field_is_demanded">Este campo é necessário para a busca</string>
 </resources>
