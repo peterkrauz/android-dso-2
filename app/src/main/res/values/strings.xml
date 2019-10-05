@@ -5,4 +5,14 @@
     <string name="type_the_agency_description">Digite a descrição para a busca</string>
     <string name="this_field_is_demanded">Este campo é necessário para a busca</string>
     <string name="federal_gov_agencies">Órgãos do Governo Federal</string>
+    <string name="paginated_to">Lendo página %d!</string>
+    <string name="no_agencies_searched_yet">Nenhuma agência buscada ainda.\n Use o botão no canto inferior\npara pesquisar!</string>
+    <string name="paged_to_end_please_re_search">Você atingiu a última página.\nPara outros resultados, pesquise denovo</string>
+    <string name="type_the_info_needed_for_searching_travels">Digite os dados necessários para\na pesquisa de viagens.</string>
+    <string name="field_out_of_range">Campo fora do limite máximo de 1 mes</string>
+
+    <string name="start_date_from">Data de ida de</string>
+    <string name="start_date_until">Data de ida ate</string>
+    <string name="end_date_from">Data de volta de</string>
+    <string name="end_date_until">Data de volta ate</string>
 </resources>

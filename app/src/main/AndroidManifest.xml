@@ -11,9 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.AgencyDetailsActivity"></activity>
+        <activity android:name=".presentation.common.BaseActivity"/>
+        <activity android:name=".presentation.agencydetails.AgencyDetailsActivity"/>
         <activity
-            android:name=".presentation.PublicAgenciesActivity"
+            android:name=".presentation.publicagencies.PublicAgenciesActivity"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

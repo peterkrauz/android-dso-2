@@ -1,4 +1,4 @@
-package com.peterkrauz.trab_dso2.presentation
+package com.peterkrauz.trab_dso2.presentation.publicagencies
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

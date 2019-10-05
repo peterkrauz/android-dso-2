@@ -1,49 +1,31 @@
-package com.peterkrauz.trab_dso2.presentation
+package com.peterkrauz.trab_dso2.presentation.publicagencies
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.peterkrauz.trab_dso2.Injector
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 import com.peterkrauz.trab_dso2.data.repositories.PublicAgencyRepository
+import com.peterkrauz.trab_dso2.presentation.common.PaginatorViewModel
 import com.peterkrauz.trab_dso2.utils.IntentExtras
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PublicAgenciesViewModel(
     private val agencyRepository: PublicAgencyRepository = Injector.publicAgencyRepository
-) : ViewModel() {
+) : PaginatorViewModel<PublicAgency>() {
 
-    private var page: Int = 1
+    override var pageSize: Int = 15
+    override var pageNumber: Int = 1
+    override var currentPage: List<PublicAgency> = emptyList()
+    private var descriptionToSearch: String = ""
 
     val publicAgenciesLiveData = MutableLiveData<List<PublicAgency>>()
     val searchAgenciesLiveEvent = SingleLiveEvent<Unit>()
     val agencyClickedLiveEvent = SingleLiveEvent<Bundle>()
 
     val publicAgencyTextErrorLiveData = MutableLiveData<Boolean>()
-
-    val loadingLiveData = MutableLiveData<Boolean>()
-    val errorLiveEvent = SingleLiveEvent<Throwable>()
-
-    private val errorHandler = CoroutineExceptionHandler { _, error -> handleError(error) }
-
-    init {
-        viewModelScope.launch(errorHandler) {
-            loadingLiveData.value = true
-            publicAgenciesLiveData.value = agencyRepository.getAll(page)
-            loadingLiveData.value = false
-        }
-    }
-
-    private fun handleError(error: Throwable) {
-        loadingLiveData.value = false
-        errorLiveEvent.value = error
-    }
 
     fun onSearchAgencies() {
         searchAgenciesLiveEvent.call()
@@ -55,10 +37,14 @@ class PublicAgenciesViewModel(
 
     fun searchAgencies(description: String) {
         publicAgencyTextErrorLiveData.value = false
+        clearItemsLiveEvent.call()
+        descriptionToSearch = description
+        pageNumber = 1
 
         viewModelScope.launch(errorHandler) {
             loadingLiveData.value = true
-            publicAgenciesLiveData.value = agencyRepository.searchByDescription(description)
+            currentPage = agencyRepository.searchByDescription(descriptionToSearch)
+            publicAgenciesLiveData.value = agencyRepository.searchByDescription(descriptionToSearch)
             loadingLiveData.value = false
         }
     }
@@ -67,6 +53,27 @@ class PublicAgenciesViewModel(
         agencyClickedLiveEvent.value = bundleOf(
             IntentExtras.EXTRA_AGENCY to agency
         )
+    }
+
+    override fun paginate() {
+        if (currentPage.size % pageSize != 0) {
+            pagedToEndLiveEvent.call()
+        } else {
+            pageNumber++
+            paginateLiveEvent.value = pageNumber
+
+            viewModelScope.launch(errorHandler) {
+                loadingLiveData.value = true
+
+                publicAgenciesLiveData.value = agencyRepository.searchByDescription(
+                    descriptionToSearch,
+                    pageNumber
+                )
+                pageSize = publicAgenciesLiveData.value?.size!!
+
+                loadingLiveData.value = false
+            }
+        }
     }
 
 }

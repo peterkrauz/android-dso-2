@@ -39,7 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="6dp"
         app:layout_constraintTop_toBottomOf="@id/textViewRationale"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd">
@@ -57,6 +57,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/search"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintTop_toBottomOf="@id/textInputLayoutAgenciesDescription"
         app:layout_constraintBottom_toBottomOf="parent"
