@@ -10,14 +10,14 @@ import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFie
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.BLANK_FIELD
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.INVALID_RANGE
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldsErrorBody
-import com.peterkrauz.trab_dso2.presentation.common.PaginatorViewModel
+import com.peterkrauz.trab_dso2.presentation.common.PaginatingViewModel
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 class AgencyDetailsViewModel(
     private val agency: PublicAgency,
     private val travelRepository: TravelRepository = Injector.travelRepository
-) : PaginatorViewModel<Travel>() {
+) : PaginatingViewModel<Travel>() {
 
     override var pageSize: Int = 15
     override var pageNumber: Int = 1

@@ -2,7 +2,7 @@ package com.peterkrauz.trab_dso2.presentation.common
 
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
 
-abstract class PaginatorViewModel<T> : BaseViewModel() {
+abstract class PaginatingViewModel<T> : BaseViewModel() {
 
     abstract var pageSize: Int
     abstract var pageNumber: Int
