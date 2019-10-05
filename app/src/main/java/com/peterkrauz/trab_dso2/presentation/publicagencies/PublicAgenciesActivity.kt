@@ -1,7 +1,6 @@
 package com.peterkrauz.trab_dso2.presentation.publicagencies
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,22 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 import com.peterkrauz.trab_dso2.presentation.agencydetails.AgencyDetailsActivity
+import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingActivity
 import com.peterkrauz.trab_dso2.presentation.publicagencies.bottomsheet.SearchPublicAgenciesBottomSheet
-import com.peterkrauz.trab_dso2.utils.extensions.toast
 import com.peterkrauz.trab_dso2.utils.lazyViewModel
 import kotlinx.android.synthetic.main.activity_public_agencies.*
 
-class PublicAgenciesActivity : AppCompatActivity() {
+class PublicAgenciesActivity : PaginatingActivity<PublicAgency>() {
 
-    private var searchAgenciesBottomSheet: SearchPublicAgenciesBottomSheet? = null
-
-    private val agenciesAdapter by lazy {
+    override val adapter by lazy {
         PublicAgenciesAdapter {
             viewModel.onAgencyClick(it)
         }
     }
 
-    private val viewModel by lazyViewModel {
+    override val viewModel by lazyViewModel {
         PublicAgenciesViewModel()
     }
 
@@ -35,7 +32,7 @@ class PublicAgenciesActivity : AppCompatActivity() {
 
         setupToolbar()
         setupView()
-        setupViewModel()
+        setupObservers()
     }
 
     private fun setupToolbar() {
@@ -48,7 +45,7 @@ class PublicAgenciesActivity : AppCompatActivity() {
 
     private fun setupView() {
         recyclerViewPublicAgencies.apply {
-            adapter = agenciesAdapter
+            adapter = this@PublicAgenciesActivity.adapter
             layoutManager = LinearLayoutManager(this@PublicAgenciesActivity)
             setHasFixedSize(true)
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -66,23 +63,23 @@ class PublicAgenciesActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupViewModel() {
+    override fun setupObservers() {
+        super.setupObservers()
         viewModel.publicAgenciesLiveData.observe(this, ::setPublicAgencies)
         viewModel.loadingLiveData.observe(this, ::setLoading)
         viewModel.searchAgenciesLiveEvent.observe(this) { onSearchAgencies() }
         viewModel.agencyClickedLiveEvent.observe(this, ::navigateToAgencyDetails)
-        viewModel.paginateLiveEvent.observe(this, ::notifyPaginated)
-        viewModel.clearItemsLiveEvent.observe(this) { clearAgencies() }
-        viewModel.pagedToEndLiveEvent.observe(this) { notifyEndOfPages() }
     }
 
     // TODO("if there's time left, make recycler view have two types of viewholders. one of em has just the number of the pageNumber")
     private fun setPublicAgencies(publicAgencies: List<PublicAgency>) {
         if (publicAgencies.isEmpty()) {
-            textViewNoAgenciesSearched.isVisible = true
+            textViewNoAgenciesFound.isVisible = true
+            recyclerViewPublicAgencies.isVisible = false
         } else {
-            textViewNoAgenciesSearched.isVisible = false
-            agenciesAdapter.submitItems(publicAgencies.toMutableList())
+            textViewNoAgenciesFound.isVisible = false
+            recyclerViewPublicAgencies.isVisible = true
+            adapter.submitItems(publicAgencies.toMutableList())
         }
     }
 
@@ -91,9 +88,9 @@ class PublicAgenciesActivity : AppCompatActivity() {
     }
 
     private fun onSearchAgencies() {
-        searchAgenciesBottomSheet =
+        inputBottomSheet =
             SearchPublicAgenciesBottomSheet()
-        searchAgenciesBottomSheet?.show(supportFragmentManager, "SearchAgenciesBottomSheet")
+        inputBottomSheet?.show(supportFragmentManager, "SearchAgenciesBottomSheet")
     }
 
     private fun navigateToAgencyDetails(extra: Bundle) {
@@ -101,17 +98,5 @@ class PublicAgenciesActivity : AppCompatActivity() {
             putExtras(extra)
         }
         startActivity(intent)
-    }
-
-    private fun notifyPaginated(page: Int) {
-        toast(getString(R.string.paginated_to, page))
-    }
-
-    private fun clearAgencies() {
-        agenciesAdapter.clearItems()
-    }
-
-    private fun notifyEndOfPages() {
-        toast(getString(R.string.paged_to_end_please_re_search))
     }
 }

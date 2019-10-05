@@ -1,6 +1,7 @@
 package com.peterkrauz.trab_dso2.presentation.agencydetails
 
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -8,20 +9,18 @@ import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 import com.peterkrauz.trab_dso2.data.entities.Travel
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.SearchTravelsBottomSheet
-import com.peterkrauz.trab_dso2.presentation.common.BaseActivity
+import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingActivity
 import com.peterkrauz.trab_dso2.utils.IntentExtras
 import com.peterkrauz.trab_dso2.utils.lazyViewModel
 import kotlinx.android.synthetic.main.activity_agency_details.*
 
-class AgencyDetailsActivity : BaseActivity() {
+class AgencyDetailsActivity : PaginatingActivity<Travel>() {
 
-    private var searchTravelsBottomSheet: SearchTravelsBottomSheet? = null
-
-    private val travelsAdapter by lazy {
+    override val adapter by lazy {
         TravelsAdapter()
     }
 
-    private val viewModel by lazyViewModel {
+    override val viewModel by lazyViewModel {
         val agency = intent.extras?.getParcelable<PublicAgency>(IntentExtras.EXTRA_AGENCY)!!
         AgencyDetailsViewModel(agency)
     }
@@ -47,36 +46,56 @@ class AgencyDetailsActivity : BaseActivity() {
 
     private fun setupView() {
         recyclerViewTravels.apply {
-            adapter = travelsAdapter
+            adapter = this@AgencyDetailsActivity.adapter
             layoutManager = LinearLayoutManager(this@AgencyDetailsActivity)
             setHasFixedSize(true)
-             addOnScrollListener(object: RecyclerView.OnScrollListener() {
-                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                     super.onScrollStateChanged(recyclerView, newState)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
 
-                     if (!canScrollVertically(1)) {
-                         viewModel.paginate()
-                     }
-                 }
-             })
+                    if (!canScrollVertically(1)) {
+                        viewModel.paginate()
+                    }
+                }
+            })
         }
         fabInsertTravelDates.setOnClickListener {
             viewModel.onSearchTravels()
         }
     }
 
-    private fun setupObservers() {
+    override fun setupObservers() {
+        super.setupObservers()
         viewModel.travelsLiveData.observe(this, ::setTravels)
+        viewModel.loadingLiveData.observe(this, ::setLoading)
         viewModel.searchTravelsLiveEvent.observe(this) { onSearchTravels() }
+        viewModel.travelExpensesSumLiveData.observe(this, ::setExpensesSum)
     }
 
     private fun onSearchTravels() {
-        searchTravelsBottomSheet =
+        inputBottomSheet =
             SearchTravelsBottomSheet()
-        searchTravelsBottomSheet?.show(supportFragmentManager, "SearchTravelsBottomSheet")
+        inputBottomSheet?.show(supportFragmentManager, "SearchTravelsBottomSheet")
     }
 
     private fun setTravels(travels: List<Travel>) {
-        travelsAdapter.submitItems(travels.toMutableList())
+        if (travels.isEmpty()) {
+            textViewNoTravelsFound.isVisible = true
+            recyclerViewTravels.isVisible = false
+        } else {
+            textViewNoTravelsFound.isVisible = false
+            recyclerViewTravels.isVisible = true
+            adapter.submitItems(travels.toMutableList())
+        }
+    }
+
+    private fun setExpensesSum(expensesSum: Double) {
+        textViewTotalCost.text = getString(R.string.cost, expensesSum)
+    }
+
+    private fun setLoading(loading: Boolean) {
+        progressBarTravelsCost.isVisible = loading
+        progressBarTravels.isVisible = loading
+        textViewTotalCost.isVisible = !loading
     }
 }

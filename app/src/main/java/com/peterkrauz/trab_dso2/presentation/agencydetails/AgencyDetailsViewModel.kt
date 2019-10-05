@@ -6,18 +6,25 @@ import com.peterkrauz.trab_dso2.Injector
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 import com.peterkrauz.trab_dso2.data.entities.Travel
 import com.peterkrauz.trab_dso2.data.repositories.TravelRepository
-import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.NO_ERROR
-import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.BLANK_FIELD
-import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.INVALID_RANGE
+import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.*
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldsErrorBody
-import com.peterkrauz.trab_dso2.presentation.common.PaginatingViewModel
+import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingViewModel
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
+import com.peterkrauz.trab_dso2.utils.extensions.isValidDateFormat
+import com.peterkrauz.trab_dso2.utils.extensions.month
 import kotlinx.coroutines.launch
 
 class AgencyDetailsViewModel(
     private val agency: PublicAgency,
     private val travelRepository: TravelRepository = Injector.travelRepository
 ) : PaginatingViewModel<Travel>() {
+
+    private var travelExpensesSum: Double = 0.0
+        set(value) {
+            field = value
+            travelExpensesSumLiveData.value = value
+        }
+    private var currentTravelExpenses: Double = 0.0
 
     override var pageSize: Int = 15
     override var pageNumber: Int = 1
@@ -26,6 +33,7 @@ class AgencyDetailsViewModel(
 
     val travelsLiveData = MutableLiveData<List<Travel>>()
     val searchTravelsLiveEvent = SingleLiveEvent<Unit>()
+    val travelExpensesSumLiveData = MutableLiveData<Double>()
 
     val validationCompleteLiveEvent = SingleLiveEvent<Unit>()
     val travelsTextErrorLiveData = MutableLiveData<TravelFieldsErrorBody>()
@@ -55,8 +63,10 @@ class AgencyDetailsViewModel(
             )
             loadingLiveData.value = false
         }
+        // TODO("update travelling expenses value")
     }
 
+    // TODO("break this method in 3")
     fun validateAndSearch(
         startDateFrom: String,
         startDateUntil: String,
@@ -87,6 +97,29 @@ class AgencyDetailsViewModel(
 
         if (endDateUntil.isBlank()) {
             endDateUntilError = BLANK_FIELD
+            noErrors = false
+        }
+        // endregion
+
+        // checking for valid formats
+
+        if (!startDateFrom.isValidDateFormat()) {
+            startDateFromError = INVALID_FORMAT
+            noErrors = false
+        }
+
+        if (!startDateUntil.isValidDateFormat()) {
+            startDateUntilError = INVALID_FORMAT
+            noErrors = false
+        }
+
+        if (!endDateFrom.isValidDateFormat()) {
+            endDateFromError = INVALID_FORMAT
+            noErrors = false
+        }
+
+        if (!endDateUntil.isValidDateFormat()) {
+            endDateUntilError = INVALID_FORMAT
             noErrors = false
         }
         // endregion
@@ -163,8 +196,4 @@ class AgencyDetailsViewModel(
         }
     }
 
-}
-
-private fun String.month(): Int {
-    return this.substring(2, 5).toInt()
 }

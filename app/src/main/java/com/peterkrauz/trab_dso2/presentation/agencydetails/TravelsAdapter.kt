@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.data.entities.Travel
-import com.peterkrauz.trab_dso2.presentation.common.PagedAdapter
+import com.peterkrauz.trab_dso2.presentation.common.paging.PagedAdapter
 
-class TravelsAdapter : RecyclerView.Adapter<TravelViewHolder>(), PagedAdapter<Travel> {
+class TravelsAdapter : RecyclerView.Adapter<TravelViewHolder>(),
+    PagedAdapter<Travel> {
 
     var travels = emptyList<Travel>()
         set(value) {

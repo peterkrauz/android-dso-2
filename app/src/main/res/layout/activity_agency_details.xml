@@ -35,9 +35,36 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
+            <ProgressBar
+                android:id="@+id/progressBarTravelsCost"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:backgroundTint="@color/white"
+                android:indeterminateTint="@color/white"
+                android:progressTint="@color/white"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/textViewNoTravelsFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/title_grey"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="@string/no_travels_searched_or_found"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTravels"
@@ -45,6 +72,7 @@
         android:layout_height="0dp"
         android:overScrollMode="never"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -61,7 +89,7 @@
         app:rippleColor="@android:color/white" />
 
     <ProgressBar
-        android:id="@+id/progressBarPublicAgencies"
+        android:id="@+id/progressBarTravels"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

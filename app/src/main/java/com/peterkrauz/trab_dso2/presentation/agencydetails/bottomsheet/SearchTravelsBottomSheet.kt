@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProviders
 import com.peterkrauz.trab_dso2.R
-import com.peterkrauz.trab_dso2.data.entities.Travel
 import com.peterkrauz.trab_dso2.presentation.agencydetails.AgencyDetailsViewModel
-import com.peterkrauz.trab_dso2.presentation.common.InputBottomSheet
-import com.peterkrauz.trab_dso2.utils.extensions.textOrBlank
+import com.peterkrauz.trab_dso2.presentation.common.bottomsheet.InputBottomSheet
+import com.peterkrauz.trab_dso2.utils.extensions.*
 import kotlinx.android.synthetic.main.bottom_sheet_search_travels.*
 
 class SearchTravelsBottomSheet : InputBottomSheet() {
@@ -28,6 +27,11 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
     }
 
     override fun setupView() {
+        textInputLayoutTravelStartDateFrom.run { attachTextChangedListener(DateTextWatcher(this)) }
+        textInputLayoutTravelStartDateUntil.run { attachTextChangedListener(DateTextWatcher(this)) }
+        textInputLayoutTravelEndDateFrom.run { attachTextChangedListener(DateTextWatcher(this)) }
+        textInputLayoutTravelEndDateUntil.run { attachTextChangedListener(DateTextWatcher(this)) }
+
         buttonSearch.setOnClickListener {
             validateAndSearch()
         }
@@ -58,5 +62,6 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
         TravelFieldErrorType.NO_ERROR -> null
         TravelFieldErrorType.INVALID_RANGE -> getString(R.string.field_out_of_range)
         TravelFieldErrorType.BLANK_FIELD -> getString(R.string.this_field_is_demanded)
+        TravelFieldErrorType.INVALID_FORMAT -> getString(R.string.field_in_wrong_format)
     }
 }

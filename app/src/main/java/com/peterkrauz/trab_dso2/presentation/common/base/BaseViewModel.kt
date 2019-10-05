@@ -1,4 +1,4 @@
-package com.peterkrauz.trab_dso2.presentation.common
+package com.peterkrauz.trab_dso2.presentation.common.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

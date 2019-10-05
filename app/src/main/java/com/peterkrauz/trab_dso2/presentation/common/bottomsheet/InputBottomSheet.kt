@@ -1,4 +1,4 @@
-package com.peterkrauz.trab_dso2.presentation.common
+package com.peterkrauz.trab_dso2.presentation.common.bottomsheet
 
 import android.os.Bundle
 import android.view.View

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.peterkrauz.trab_dso2.Injector
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
 import com.peterkrauz.trab_dso2.data.repositories.PublicAgencyRepository
-import com.peterkrauz.trab_dso2.presentation.common.PaginatingViewModel
+import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingViewModel
 import com.peterkrauz.trab_dso2.utils.IntentExtras
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
 import kotlinx.coroutines.launch

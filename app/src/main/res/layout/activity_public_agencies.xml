@@ -22,14 +22,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
-        android:id="@+id/textViewNoAgenciesSearched"
+        android:id="@+id/textViewNoAgenciesFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/title_grey"
         android:gravity="center"
         android:textSize="18sp"
-        android:text="@string/no_agencies_searched_yet"
+        android:text="@string/no_agencies_searched_or_found"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +41,7 @@
         android:layout_height="0dp"
         android:overScrollMode="never"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

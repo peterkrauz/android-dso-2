@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProviders
 import com.peterkrauz.trab_dso2.R
-import com.peterkrauz.trab_dso2.presentation.common.InputBottomSheet
+import com.peterkrauz.trab_dso2.presentation.common.bottomsheet.InputBottomSheet
 import com.peterkrauz.trab_dso2.presentation.publicagencies.PublicAgenciesViewModel
 import kotlinx.android.synthetic.main.bottom_sheet_search_public_agencies.*
 

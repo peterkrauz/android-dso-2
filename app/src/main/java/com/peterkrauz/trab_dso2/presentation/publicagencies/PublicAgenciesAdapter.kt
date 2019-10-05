@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.data.entities.PublicAgency
-import com.peterkrauz.trab_dso2.presentation.common.PagedAdapter
+import com.peterkrauz.trab_dso2.presentation.common.paging.PagedAdapter
 
 class PublicAgenciesAdapter(
     private val onAgencyClick: ((PublicAgency) -> Unit)
-) : RecyclerView.Adapter<PublicAgenciesViewHolder>(), PagedAdapter<PublicAgency> {
+) : RecyclerView.Adapter<PublicAgenciesViewHolder>(),
+    PagedAdapter<PublicAgency> {
 
     private var publicAgencies = emptyList<PublicAgency>()
         set (value) {
