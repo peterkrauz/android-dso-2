@@ -5,4 +5,13 @@ class TravelFieldsErrorBody(
     val startDateUntilError: TravelFieldErrorType,
     val endDateFromError: TravelFieldErrorType,
     val endDateUntilError: TravelFieldErrorType
-)
+) {
+    companion object {
+        fun noErrorBody() = TravelFieldsErrorBody(
+            TravelFieldErrorType.NO_ERROR,
+            TravelFieldErrorType.NO_ERROR,
+            TravelFieldErrorType.NO_ERROR,
+            TravelFieldErrorType.NO_ERROR
+        )
+    }
+}

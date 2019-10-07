@@ -47,7 +47,7 @@ class AgencyDetailsViewModel(
     }
 
     private fun searchTravels(searchBody: TravelsSearchBody) {
-        travelsTextErrorLiveData.value = null
+        travelsTextErrorLiveData.value = TravelFieldsErrorBody.noErrorBody()
         clearItemsLiveEvent.call()
         datePeriodToSearch = searchBody
         pageNumber = 1
