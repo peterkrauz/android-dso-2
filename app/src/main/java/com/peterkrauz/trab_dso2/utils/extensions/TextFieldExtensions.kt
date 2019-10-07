@@ -6,7 +6,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 fun TextInputLayout.textOrBlank() = this.editText?.text.toString()
 
-fun TextInputLayout.attachTextChangedListener(textWatcher: TextWatcher) {
+fun TextInputLayout.attachTextWatcher(textWatcher: TextWatcher) {
     this.editText?.addTextChangedListener(textWatcher)
 }
 

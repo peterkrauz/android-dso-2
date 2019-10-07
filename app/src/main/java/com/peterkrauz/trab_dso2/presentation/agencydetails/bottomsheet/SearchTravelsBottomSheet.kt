@@ -27,10 +27,10 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
     }
 
     override fun setupView() {
-        textInputLayoutTravelStartDateFrom.run { attachTextChangedListener(DateTextWatcher(this)) }
-        textInputLayoutTravelStartDateUntil.run { attachTextChangedListener(DateTextWatcher(this)) }
-        textInputLayoutTravelEndDateFrom.run { attachTextChangedListener(DateTextWatcher(this)) }
-        textInputLayoutTravelEndDateUntil.run { attachTextChangedListener(DateTextWatcher(this)) }
+        textInputLayoutTravelStartDateFrom.run { attachTextWatcher(DateTextWatcher(this)) }
+        textInputLayoutTravelStartDateUntil.run { attachTextWatcher(DateTextWatcher(this)) }
+        textInputLayoutTravelEndDateFrom.run { attachTextWatcher(DateTextWatcher(this)) }
+        textInputLayoutTravelEndDateUntil.run { attachTextWatcher(DateTextWatcher(this)) }
 
         buttonSearch.setOnClickListener {
             validateAndSearch()

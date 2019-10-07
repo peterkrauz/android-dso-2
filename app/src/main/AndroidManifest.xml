@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.common.base.BaseActivity"/>
-        <activity android:name=".presentation.agencydetails.AgencyDetailsActivity"/>
+        <activity android:name=".presentation.traveldetails.TravelDetailsActivity" />
+        <activity android:name=".presentation.common.base.BaseActivity" />
+        <activity android:name=".presentation.agencydetails.AgencyDetailsActivity" />
         <activity
             android:name=".presentation.publicagencies.PublicAgenciesActivity"
             android:windowSoftInputMode="adjustNothing">
