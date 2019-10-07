@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.observe
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.presentation.agencydetails.AgencyDetailsViewModel
 import com.peterkrauz.trab_dso2.presentation.common.bottomsheet.InputBottomSheet
-import com.peterkrauz.trab_dso2.utils.extensions.*
+import com.peterkrauz.trab_dso2.utils.extensions.DateTextWatcher
+import com.peterkrauz.trab_dso2.utils.extensions.attachTextWatcher
+import com.peterkrauz.trab_dso2.utils.extensions.textOrBlank
 import kotlinx.android.synthetic.main.bottom_sheet_search_travels.*
 
 class SearchTravelsBottomSheet : InputBottomSheet() {

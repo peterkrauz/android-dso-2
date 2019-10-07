@@ -19,6 +19,11 @@ class PublicAgenciesViewModel(
     override var pageSize: Int = 15
     override var pageNumber: Int = 1
     override var currentPage: List<PublicAgency> = emptyList()
+        set(value) {
+            field = value
+            publicAgenciesLiveData.value = value
+        }
+
     private var descriptionToSearch: String = ""
 
     val publicAgenciesLiveData = MutableLiveData<List<PublicAgency>>()
@@ -44,7 +49,6 @@ class PublicAgenciesViewModel(
         viewModelScope.launch(errorHandler) {
             loadingLiveData.value = true
             currentPage = agencyRepository.searchByDescription(descriptionToSearch)
-            publicAgenciesLiveData.value = agencyRepository.searchByDescription(descriptionToSearch)
             loadingLiveData.value = false
         }
     }
@@ -59,18 +63,15 @@ class PublicAgenciesViewModel(
         if (currentPage.size % pageSize != 0) {
             pagedToEndLiveEvent.call()
         } else {
-            pageNumber++
-            paginateLiveEvent.value = pageNumber
+            paginateLiveEvent.value = ++pageNumber
 
             viewModelScope.launch(errorHandler) {
                 loadingLiveData.value = true
-
-                publicAgenciesLiveData.value = agencyRepository.searchByDescription(
+                currentPage = agencyRepository.searchByDescription(
                     descriptionToSearch,
                     pageNumber
                 )
-                pageSize = publicAgenciesLiveData.value?.size!!
-
+                pageSize = currentPage.size
                 loadingLiveData.value = false
             }
         }

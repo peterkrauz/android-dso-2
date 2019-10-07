@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:focusable="true"
         android:clickable="true"
-        android:background="@drawable/ripple_bg_item_agency"
+        android:background="@drawable/ripple_bg_item"
         android:padding="16dp">
 
         <TextView

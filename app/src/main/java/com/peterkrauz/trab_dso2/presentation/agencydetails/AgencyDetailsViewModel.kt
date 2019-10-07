@@ -1,5 +1,7 @@
 package com.peterkrauz.trab_dso2.presentation.agencydetails
 
+import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.peterkrauz.trab_dso2.Injector
@@ -9,30 +11,45 @@ import com.peterkrauz.trab_dso2.data.repositories.TravelRepository
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldErrorType.*
 import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFieldsErrorBody
 import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingViewModel
+import com.peterkrauz.trab_dso2.utils.IntentExtras
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
 import com.peterkrauz.trab_dso2.utils.extensions.isValidDateFormat
 import com.peterkrauz.trab_dso2.utils.extensions.month
 import kotlinx.coroutines.launch
+
+const val EMPTY_VALUE = 0.0
 
 class AgencyDetailsViewModel(
     private val agency: PublicAgency,
     private val travelRepository: TravelRepository = Injector.travelRepository
 ) : PaginatingViewModel<Travel>() {
 
-    private var travelExpensesSum: Double = 0.0
+    private var travelExpensesSum: Double = EMPTY_VALUE
         set(value) {
             field = value
             travelExpensesSumLiveData.value = value
         }
-    private var currentTravelExpenses: Double = 0.0
+
+    private var currentTravelExpenses: Double = EMPTY_VALUE
+        set(value) {
+            field = value
+            travelExpensesSum += value
+        }
 
     override var pageSize: Int = 15
     override var pageNumber: Int = 1
     override var currentPage: List<Travel> = emptyList()
+        set(value) {
+            field = value
+            travelsLiveData.value = value
+            updateExpenses()
+        }
+
     lateinit var datePeriodToSearch: TravelsSearchBody
 
     val travelsLiveData = MutableLiveData<List<Travel>>()
     val searchTravelsLiveEvent = SingleLiveEvent<Unit>()
+    val travelClickedLiveEvent = SingleLiveEvent<Bundle>()
     val travelExpensesSumLiveData = MutableLiveData<Double>()
 
     val validationCompleteLiveEvent = SingleLiveEvent<Unit>()
@@ -49,12 +66,14 @@ class AgencyDetailsViewModel(
     private fun searchTravels(searchBody: TravelsSearchBody) {
         travelsTextErrorLiveData.value = TravelFieldsErrorBody.noErrorBody()
         clearItemsLiveEvent.call()
+
+        currentTravelExpenses = EMPTY_VALUE
         datePeriodToSearch = searchBody
         pageNumber = 1
 
         viewModelScope.launch(errorHandler) {
             loadingLiveData.value = true
-            travelsLiveData.value = travelRepository.getAllInsidePeriod(
+            currentPage = travelRepository.getAllInsidePeriod(
                 searchBody.startDateFrom,
                 searchBody.startDateUntil,
                 searchBody.endDateFrom,
@@ -63,7 +82,6 @@ class AgencyDetailsViewModel(
             )
             loadingLiveData.value = false
         }
-        // TODO("update travelling expenses value")
     }
 
     // TODO("break this method in 3")
@@ -171,17 +189,21 @@ class AgencyDetailsViewModel(
         return dateUntil.month() - dateFrom.month() <= 1
     }
 
+    fun onTravelClick(travel: Travel) {
+        travelClickedLiveEvent.value = bundleOf(
+            IntentExtras.EXTRA_TRAVEL to travel
+        )
+    }
+
     override fun paginate() {
         if (currentPage.size % pageSize != 0) {
             pagedToEndLiveEvent.call()
         } else {
-            pageNumber++
-            paginateLiveEvent.value = pageNumber
+            paginateLiveEvent.value = ++pageNumber
 
             viewModelScope.launch(errorHandler) {
                 loadingLiveData.value = true
-
-                travelsLiveData.value = travelRepository.getAllInsidePeriod(
+                currentPage = travelRepository.getAllInsidePeriod(
                     datePeriodToSearch.startDateFrom,
                     datePeriodToSearch.startDateUntil,
                     datePeriodToSearch.endDateFrom,
@@ -190,10 +212,17 @@ class AgencyDetailsViewModel(
                     pageNumber
                 )
                 pageSize = travelsLiveData.value?.size!!
-
                 loadingLiveData.value = false
             }
         }
+    }
+
+    private fun updateExpenses() {
+        var currentSum = EMPTY_VALUE
+        currentPage.forEach {
+            currentSum += it.totalCost
+        }
+        currentTravelExpenses = currentSum
     }
 
 }
