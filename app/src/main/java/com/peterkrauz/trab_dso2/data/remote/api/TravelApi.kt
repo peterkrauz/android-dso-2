@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface TravelApi {
 
-    @GET("api-de-dados/viagens")
+    @GET("/api-de-dados/viagens")
     suspend fun getAllInsidePeriod(
         @Query("dataIdaDe") startDateFrom: String,
         @Query("dataIdaAte") startDateUntil: String,

@@ -8,10 +8,6 @@ class PublicAgencyRepository (
     private val api: PublicAgencyApi = Injector.publicAgencyApi
 ) {
 
-    suspend fun getAll(page: Int = 1): List<PublicAgency> {
-        return api.getAll(page)
-    }
-
     suspend fun searchByDescription(description: String, page: Int = 1): List<PublicAgency> {
         return api.searchByDescription(description, page)
     }

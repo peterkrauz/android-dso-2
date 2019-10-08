@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
+import com.peterkrauz.trab_dso2.BuildConfig
 import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.presentation.agencydetails.AgencyDetailsViewModel
 import com.peterkrauz.trab_dso2.presentation.common.bottomsheet.InputBottomSheet
-import com.peterkrauz.trab_dso2.utils.extensions.DateTextWatcher
-import com.peterkrauz.trab_dso2.utils.extensions.attachTextWatcher
+import com.peterkrauz.trab_dso2.utils.extensions.text
 import com.peterkrauz.trab_dso2.utils.extensions.textOrBlank
 import kotlinx.android.synthetic.main.bottom_sheet_search_travels.*
 
@@ -29,13 +29,13 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
     }
 
     override fun setupView() {
-        textInputLayoutTravelStartDateFrom.run { attachTextWatcher(DateTextWatcher(this)) }
-        textInputLayoutTravelStartDateUntil.run { attachTextWatcher(DateTextWatcher(this)) }
-        textInputLayoutTravelEndDateFrom.run { attachTextWatcher(DateTextWatcher(this)) }
-        textInputLayoutTravelEndDateUntil.run { attachTextWatcher(DateTextWatcher(this)) }
-
         buttonSearch.setOnClickListener {
             validateAndSearch()
+            dismiss()
+        }
+
+        if (BuildConfig.DEBUG) {
+            fillInTravelData()
         }
     }
 
@@ -65,5 +65,12 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
         TravelFieldErrorType.INVALID_RANGE -> getString(R.string.field_out_of_range)
         TravelFieldErrorType.BLANK_FIELD -> getString(R.string.this_field_is_demanded)
         TravelFieldErrorType.INVALID_FORMAT -> getString(R.string.field_in_wrong_format)
+    }
+
+    private fun fillInTravelData() {
+        textInputLayoutTravelStartDateFrom.text = "01/01/2019"
+        textInputLayoutTravelStartDateUntil.text = "30/01/2019"
+        textInputLayoutTravelEndDateFrom.text = "01/01/2019"
+        textInputLayoutTravelEndDateUntil.text = "30/01/2019"
     }
 }

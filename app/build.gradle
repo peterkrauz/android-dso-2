@@ -13,7 +13,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        it.buildConfigField "String", "BASE_URL", "\"http://www.transparencia.gov.br/\""
+        it.buildConfigField "String", "BASE_URL", "\"http://www.transparencia.gov.br\""
     }
     buildTypes {
         release {

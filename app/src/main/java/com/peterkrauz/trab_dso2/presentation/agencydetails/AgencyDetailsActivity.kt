@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_agency_details.*
 
 class AgencyDetailsActivity : PaginatingActivity<Travel>() {
 
+    private val agency: PublicAgency by lazy { intent?.extras?.getParcelable(IntentExtras.EXTRA_AGENCY) as PublicAgency }
+
     override val adapter by lazy {
         TravelsAdapter {
             viewModel.onTravelClick(it)
@@ -25,7 +27,6 @@ class AgencyDetailsActivity : PaginatingActivity<Travel>() {
     }
 
     override val viewModel by lazyViewModel {
-        val agency = intent.extras?.getParcelable<PublicAgency>(IntentExtras.EXTRA_AGENCY)!!
         AgencyDetailsViewModel(agency)
     }
 

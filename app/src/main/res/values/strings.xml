@@ -13,7 +13,8 @@
     <string name="date_input_example">ex.: 09/06/2018</string>
     <string name="field_out_of_range">Campo fora do limite máximo de 1 mes</string>
     <string name="field_in_wrong_format">Campo fora do formato</string>
-    <string name="cost">$%d</string>
+    <string name="cost">$%f</string>
+    <string name="travels_under">Viagens por %s</string>
 
     <string name="start_date_from">Data de ida de</string>
     <string name="start_date_until">Data de ida ate</string>

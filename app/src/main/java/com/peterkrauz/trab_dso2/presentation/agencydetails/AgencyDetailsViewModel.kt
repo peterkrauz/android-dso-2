@@ -13,9 +13,7 @@ import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFie
 import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingViewModel
 import com.peterkrauz.trab_dso2.utils.IntentExtras
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
-import com.peterkrauz.trab_dso2.utils.extensions.day
-import com.peterkrauz.trab_dso2.utils.extensions.isValidDateFormat
-import com.peterkrauz.trab_dso2.utils.extensions.month
+import com.peterkrauz.trab_dso2.utils.extensions.*
 import kotlinx.coroutines.launch
 
 const val EMPTY_VALUE = 0.0
@@ -55,6 +53,10 @@ class AgencyDetailsViewModel(
 
     val validationCompleteLiveEvent = SingleLiveEvent<Unit>()
     val travelsTextErrorLiveData = MutableLiveData<TravelFieldsErrorBody>()
+
+    init {
+        travelExpensesSum = EMPTY_VALUE
+    }
 
     fun onSearchTravels() {
         searchTravelsLiveEvent.call()
@@ -120,24 +122,30 @@ class AgencyDetailsViewModel(
         }
         // endregion
 
-        // checking for valid formats
+        // clearing all '/' from strings
+        val newStartDateFrom = startDateFrom.clearSlashes()
+        val newStartDateUntil = startDateUntil.clearSlashes()
+        val newEndDateFrom = endDateFrom.clearSlashes()
+        val newEndDateUntil = endDateUntil.clearSlashes()
+        // endregion
 
-        if (!startDateFrom.isValidDateFormat()) {
+        // checking for valid formats
+        if (!newStartDateFrom.isValidDateFormat()) {
             startDateFromError = INVALID_FORMAT
             noErrors = false
         }
 
-        if (!startDateUntil.isValidDateFormat()) {
+        if (!newStartDateUntil.isValidDateFormat()) {
             startDateUntilError = INVALID_FORMAT
             noErrors = false
         }
 
-        if (!endDateFrom.isValidDateFormat()) {
+        if (!newEndDateFrom.isValidDateFormat()) {
             endDateFromError = INVALID_FORMAT
             noErrors = false
         }
 
-        if (!endDateUntil.isValidDateFormat()) {
+        if (!newEndDateUntil.isValidDateFormat()) {
             endDateUntilError = INVALID_FORMAT
             noErrors = false
         }
@@ -147,7 +155,7 @@ class AgencyDetailsViewModel(
         if (
             startDateFromError == NO_ERROR &&
             startDateUntilError == NO_ERROR &&
-            !isInValidRange(startDateFrom, startDateUntil)
+            !isInValidRange(newStartDateFrom, newStartDateUntil)
         ) {
             startDateFromError = INVALID_RANGE
             startDateUntilError = INVALID_RANGE
@@ -156,7 +164,7 @@ class AgencyDetailsViewModel(
         if (
             endDateFromError == NO_ERROR &&
             endDateUntilError == NO_ERROR &&
-            !isInValidRange(endDateFrom, endDateUntil)
+            !isInValidRange(newEndDateFrom, newEndDateUntil)
         ) {
             endDateFromError = INVALID_RANGE
             endDateUntilError = INVALID_RANGE
@@ -165,11 +173,11 @@ class AgencyDetailsViewModel(
 
         if (noErrors) {
             searchTravels(
-                TravelsSearchBody(
-                    startDateFrom,
-                    startDateUntil,
-                    endDateFrom,
-                    endDateUntil
+                TravelsSearchBody.getSearchBody(
+                    newStartDateFrom,
+                    newStartDateUntil,
+                    newEndDateFrom,
+                    newEndDateUntil
                 )
             )
         } else {
@@ -182,14 +190,13 @@ class AgencyDetailsViewModel(
                 )
             )
         }
-
     }
 
     private fun isInValidRange(dateFrom: String, dateUntil: String): Boolean {
         return if (dateUntil.month() == dateFrom.month()) {
-            dateUntil.day() - dateFrom.day() <= 1
+            dateUntil.day() - dateFrom.day() in 0..1
         } else {
-            dateUntil.month() - dateFrom.month() <= 1
+            dateUntil.month() - dateFrom.month() == 1
         }
     }
 
