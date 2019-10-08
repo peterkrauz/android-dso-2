@@ -13,6 +13,7 @@ import com.peterkrauz.trab_dso2.presentation.agencydetails.bottomsheet.TravelFie
 import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingViewModel
 import com.peterkrauz.trab_dso2.utils.IntentExtras
 import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
+import com.peterkrauz.trab_dso2.utils.extensions.day
 import com.peterkrauz.trab_dso2.utils.extensions.isValidDateFormat
 import com.peterkrauz.trab_dso2.utils.extensions.month
 import kotlinx.coroutines.launch
@@ -185,8 +186,11 @@ class AgencyDetailsViewModel(
     }
 
     private fun isInValidRange(dateFrom: String, dateUntil: String): Boolean {
-        // supposing that they're on the same year
-        return dateUntil.month() - dateFrom.month() <= 1
+        return if (dateUntil.month() == dateFrom.month()) {
+            dateUntil.day() - dateFrom.day() <= 1
+        } else {
+            dateUntil.month() - dateFrom.month() <= 1
+        }
     }
 
     fun onTravelClick(travel: Travel) {
@@ -211,7 +215,7 @@ class AgencyDetailsViewModel(
                     agency.code,
                     pageNumber
                 )
-                pageSize = travelsLiveData.value?.size!!
+                pageSize = currentPage.size
                 loadingLiveData.value = false
             }
         }
@@ -223,6 +227,7 @@ class AgencyDetailsViewModel(
             currentSum += it.totalCost
         }
         currentTravelExpenses = currentSum
+        // todo: try using some lambda for this
     }
 
 }
