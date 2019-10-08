@@ -71,6 +71,7 @@ class AgencyDetailsViewModel(
         clearItemsLiveEvent.call()
 
         currentTravelExpenses = EMPTY_VALUE
+        travelExpensesSum = EMPTY_VALUE
         datePeriodToSearch = searchBody
         pageNumber = 1
 
