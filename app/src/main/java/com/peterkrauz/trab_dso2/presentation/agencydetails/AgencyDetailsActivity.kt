@@ -19,7 +19,9 @@ import kotlinx.android.synthetic.main.activity_agency_details.*
 class AgencyDetailsActivity : PaginatingActivity<Travel>() {
 
     override val adapter by lazy {
-        TravelsAdapter()
+        TravelsAdapter {
+            viewModel.onTravelClick(it)
+        }
     }
 
     override val viewModel by lazyViewModel {

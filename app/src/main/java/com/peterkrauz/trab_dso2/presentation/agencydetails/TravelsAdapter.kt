@@ -7,8 +7,9 @@ import com.peterkrauz.trab_dso2.R
 import com.peterkrauz.trab_dso2.data.entities.Travel
 import com.peterkrauz.trab_dso2.presentation.common.paging.PagedAdapter
 
-class TravelsAdapter : RecyclerView.Adapter<TravelViewHolder>(),
-    PagedAdapter<Travel> {
+class TravelsAdapter(
+    private val onTravelClick: ((Travel) -> Unit)
+) : RecyclerView.Adapter<TravelViewHolder>(), PagedAdapter<Travel> {
 
     var travels = emptyList<Travel>()
         set(value) {
@@ -23,7 +24,7 @@ class TravelsAdapter : RecyclerView.Adapter<TravelViewHolder>(),
 
     override fun onBindViewHolder(holder: TravelViewHolder, position: Int) {
         val travel = travels[position]
-        holder.bind(travel)
+        holder.bind(travel, onTravelClick)
     }
 
     override fun getItemCount(): Int = travels.size
