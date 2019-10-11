@@ -31,7 +31,6 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
     override fun setupView() {
         buttonSearch.setOnClickListener {
             validateAndSearch()
-            dismiss()
         }
 
         if (BuildConfig.DEBUG) {

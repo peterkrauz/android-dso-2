@@ -63,7 +63,8 @@ class PublicAgenciesViewModel(
         if (currentPage.size % pageSize != 0) {
             pagedToEndLiveEvent.call()
         } else {
-            paginateLiveEvent.value = ++pageNumber
+            pageNumber++
+            paginateLiveEvent.value = pageNumber
 
             viewModelScope.launch(errorHandler) {
                 loadingLiveData.value = true
@@ -71,7 +72,6 @@ class PublicAgenciesViewModel(
                     descriptionToSearch,
                     pageNumber
                 )
-                pageSize = currentPage.size
                 loadingLiveData.value = false
             }
         }

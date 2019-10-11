@@ -16,20 +16,20 @@ import com.peterkrauz.trab_dso2.utils.SingleLiveEvent
 import com.peterkrauz.trab_dso2.utils.extensions.*
 import kotlinx.coroutines.launch
 
-const val EMPTY_VALUE = 0.0
+const val EMPTY_PRICE_VALUE = 0.0
 
 class AgencyDetailsViewModel(
     private val agency: PublicAgency,
     private val travelRepository: TravelRepository = Injector.travelRepository
 ) : PaginatingViewModel<Travel>() {
 
-    private var travelExpensesSum: Double = EMPTY_VALUE
+    private var travelExpensesSum: Double = EMPTY_PRICE_VALUE
         set(value) {
             field = value
             travelExpensesSumLiveData.value = value
         }
 
-    private var currentTravelExpenses: Double = EMPTY_VALUE
+    private var currentTravelExpenses: Double = EMPTY_PRICE_VALUE
         set(value) {
             field = value
             travelExpensesSum += value
@@ -55,7 +55,7 @@ class AgencyDetailsViewModel(
     val travelsTextErrorLiveData = MutableLiveData<TravelFieldsErrorBody>()
 
     init {
-        travelExpensesSum = EMPTY_VALUE
+        travelExpensesSum = EMPTY_PRICE_VALUE
     }
 
     fun onSearchTravels() {
@@ -68,10 +68,11 @@ class AgencyDetailsViewModel(
 
     private fun searchTravels(searchBody: TravelsSearchBody) {
         travelsTextErrorLiveData.value = TravelFieldsErrorBody.noErrorBody()
+        validationCompleteLiveEvent.call()
         clearItemsLiveEvent.call()
 
-        currentTravelExpenses = EMPTY_VALUE
-        travelExpensesSum = EMPTY_VALUE
+        currentTravelExpenses = EMPTY_PRICE_VALUE
+        travelExpensesSum = EMPTY_PRICE_VALUE
         datePeriodToSearch = searchBody
         pageNumber = 1
 
@@ -160,6 +161,7 @@ class AgencyDetailsViewModel(
         ) {
             startDateFromError = INVALID_RANGE
             startDateUntilError = INVALID_RANGE
+            noErrors = false
         }
 
         if (
@@ -169,6 +171,7 @@ class AgencyDetailsViewModel(
         ) {
             endDateFromError = INVALID_RANGE
             endDateUntilError = INVALID_RANGE
+            noErrors = false
         }
         // endregion
 
@@ -195,9 +198,13 @@ class AgencyDetailsViewModel(
 
     private fun isInValidRange(dateFrom: String, dateUntil: String): Boolean {
         return if (dateUntil.month() == dateFrom.month()) {
-            dateUntil.day() - dateFrom.day() in 0..1
+            dateUntil.day() - dateFrom.day() >= 0
         } else {
-            dateUntil.month() - dateFrom.month() == 1
+            if (dateUntil.month() - dateFrom.month() == 1) {
+                dateUntil.day() - dateFrom.day() <= 0
+            } else {
+                false
+            }
         }
     }
 
@@ -211,7 +218,8 @@ class AgencyDetailsViewModel(
         if (currentPage.size % pageSize != 0) {
             pagedToEndLiveEvent.call()
         } else {
-            paginateLiveEvent.value = ++pageNumber
+            pageNumber++
+            paginateLiveEvent.value = pageNumber
 
             viewModelScope.launch(errorHandler) {
                 loadingLiveData.value = true
@@ -223,19 +231,14 @@ class AgencyDetailsViewModel(
                     agency.code,
                     pageNumber
                 )
-                pageSize = currentPage.size
                 loadingLiveData.value = false
             }
         }
     }
 
     private fun updateExpenses() {
-        var currentSum = EMPTY_VALUE
-        currentPage.forEach {
-            currentSum += it.totalCost
-        }
+        val currentSum = currentPage.map(Travel::totalCost).sum()
         currentTravelExpenses = currentSum
-        // todo: try using some lambda for this
     }
 
 }
