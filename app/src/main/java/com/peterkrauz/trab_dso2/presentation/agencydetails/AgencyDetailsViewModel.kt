@@ -89,7 +89,6 @@ class AgencyDetailsViewModel(
         }
     }
 
-    // TODO("break this method in 3")
     fun validateAndSearch(
         startDateFrom: String,
         startDateUntil: String,

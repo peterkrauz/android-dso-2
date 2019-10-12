@@ -12,7 +12,9 @@ import com.peterkrauz.trab_dso2.presentation.agencydetails.AgencyDetailsActivity
 import com.peterkrauz.trab_dso2.presentation.common.paging.PaginatingActivity
 import com.peterkrauz.trab_dso2.presentation.publicagencies.bottomsheet.SearchPublicAgenciesBottomSheet
 import com.peterkrauz.trab_dso2.utils.lazyViewModel
+import kotlinx.android.synthetic.main.activity_agency_details.*
 import kotlinx.android.synthetic.main.activity_public_agencies.*
+import kotlinx.android.synthetic.main.activity_public_agencies.toolbar
 
 class PublicAgenciesActivity : PaginatingActivity<PublicAgency>() {
 
@@ -71,7 +73,6 @@ class PublicAgenciesActivity : PaginatingActivity<PublicAgency>() {
         viewModel.agencyClickedLiveEvent.observe(this, ::navigateToAgencyDetails)
     }
 
-    // TODO("if there's time left, make recycler view have two types of viewholders. one of em has just the number of the pageNumber")
     private fun setPublicAgencies(publicAgencies: List<PublicAgency>) {
         if (publicAgencies.isEmpty()) {
             textViewNoAgenciesFound.isVisible = true
