@@ -32,10 +32,6 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
         buttonSearch.setOnClickListener {
             validateAndSearch()
         }
-
-        if (BuildConfig.DEBUG) {
-            fillInTravelData()
-        }
     }
 
     override fun setupObservers() {
@@ -64,12 +60,5 @@ class SearchTravelsBottomSheet : InputBottomSheet() {
         TravelFieldErrorType.INVALID_RANGE -> getString(R.string.field_out_of_range)
         TravelFieldErrorType.BLANK_FIELD -> getString(R.string.this_field_is_demanded)
         TravelFieldErrorType.INVALID_FORMAT -> getString(R.string.field_in_wrong_format)
-    }
-
-    private fun fillInTravelData() {
-        textInputLayoutTravelStartDateFrom.text = "01/01/2019"
-        textInputLayoutTravelStartDateUntil.text = "30/01/2019"
-        textInputLayoutTravelEndDateFrom.text = "01/01/2019"
-        textInputLayoutTravelEndDateUntil.text = "30/01/2019"
     }
 }
