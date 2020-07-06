@@ -3,7 +3,7 @@
 This repository contains files used for creating a mobile application for a college work, under the discipline of Object Oriented Systems Development 2 - hence the acronym DSO2, which stands for the same name in Portuguese.
 
 ### What does it do?
-This application fetches data from the [Portal da Transparência](http://www.portaltransparencia.gov.br/) api, providing data regarding government related expenses. 
+This application fetches data from the [Portal da Transparência](http://www.portaltransparencia.gov.br/) api, providing details regarding government related expenses. 
 A main screen displays public agencies that can be searched through their code. The detail screen shows a list of trips made by the public agency's servers - both the main screen and the detail screen are a paginated list. Lastly, the trip details screen simply shows that trip's expenses.
 
 ### Techs used
